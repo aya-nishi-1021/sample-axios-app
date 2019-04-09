@@ -1,10 +1,12 @@
 <template>
   <section class="container">
-    <input type="text" v-model="zipcode" />
-    <button @click="searchAddressInfo()">検索</button>
-    {{message}}
-    {{zipcode}}
-    {{addressData}}
+    <p>{{message}}</p>
+    <input type="text" v-model="zipcode" @focus="focus"/>
+    <button @click="searchAddressInfo()">住所自動入力</button>
+      <p>郵便番号：{{zipcode}}</p>
+      <p>都道府県：{{addressData['address1']}}</p>
+      <p>住所1：{{addressData['address2']}}</p>
+      <p>住所2：{{addressData['address3']}}</p>
   </section>
 </template>
 
@@ -33,10 +35,15 @@ export default {
           this.message = 'no data'
           return;
         }
-        this.addressData = res.data.results;
+        this.addressData = res.data.results[0];
       }).catch((error) => {
         this.message = 'error'
       })
+    },
+    focus: function() {
+      this.zipcode = ''
+      this.addressData = {}
+      this.message = ''
     }
   }
 }
@@ -44,5 +51,7 @@ export default {
 </script>
 
 <style>
-
+.container {
+  margin: 100px;
+}
 </style>
